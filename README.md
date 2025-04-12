@@ -70,9 +70,39 @@ This project uses machine learning and Microsoft Fabric's end-to-end data platfo
 ## Visualization
 ![PowerBI reports Diagram](docs/seg_report.png)
 
+📈 Insights Generated
+Identified 3–5 customer segments using unsupervised learning.
+
+Segment examples:
+
+🟢 Spend-Driven Data User
+
+🟡 Call Heavy User
+
+🔵 Peak-Time Receiver
+
+Key behavioral KPIs:
+
+Voice Spent
+
+Total revenue Amount
+
+Call Duration
+
 ---
 ## 📦 Setup Instructions
 
 1. Clone this repo:
    ```bash
-   git clone https://github.com/<your-username>/customer-segmentation-fabric.git
+   git clone https://github.com/frankadane/Customer-Segmentation-in-Telecom-with-Microsoft-Fabric.git
+Install Python dependencies:
+
+pip install -r requirements.txt
+Open notebooks in Microsoft Fabric or Jupyter:
+
+notebooks/segmentation_training.ipynb
+
+notebooks/inference_pipeline.ipynb
+
+
+
