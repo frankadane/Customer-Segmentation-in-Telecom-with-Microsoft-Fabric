@@ -67,6 +67,10 @@ This project uses machine learning and Microsoft Fabric's end-to-end data platfo
 
 ---
 
+## Visualization
+![PowerBI reports Diagram](docs/seg_report.png)
+
+---
 ## 📦 Setup Instructions
 
 1. Clone this repo:
