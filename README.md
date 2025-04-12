@@ -47,10 +47,10 @@ This project uses machine learning and Microsoft Fabric's end-to-end data platfo
 | Deliverable                        | Location                             |
 |-----------------------------------|--------------------------------------|
 | Trained ML Models                 | `model_artifacts/`                   |
-| Segmentation Output with Labels   | `output_data/segmentation_output.csv`|
+| Segmentation Output with Labels   | `output_data/segmentation_output_inference.csv`|
 | Cluster Feature Mappings          | `output_data/cluster_feature_mapping.csv` |
-| Power BI Report                   | `reports/PowerBI_Dashboard_Snapshot.png` |
-| Architecture Diagram              | `docs/architecture_diagram.png`     |
+| Power BI Report                   | `reports/PowerBI_Dashboard` |
+| Architecture Diagram              | `docs/architecture.png`     |
 
 ---
 
@@ -97,7 +97,8 @@ Call Duration
    git clone https://github.com/frankadane/Customer-Segmentation-in-Telecom-with-Microsoft-Fabric.git
 Install Python dependencies:
 
-pip install -r requirements.txt
+pip install -r requirements.txt     
+
 Open notebooks in Microsoft Fabric or Jupyter:
 
 notebooks/segmentation_training.ipynb

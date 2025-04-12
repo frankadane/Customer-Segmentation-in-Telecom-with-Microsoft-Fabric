@@ -1,0 +1,6 @@
+Cluster,Mapped Name,Most significant Features
+0,Unbilled Texter,"onnet_sms_count, total_sms_count, out_unbilled_sms_count"
+1,Spend-Driven Data User,"gpprs_traffic_up_down, total_spent, recharge_momo_count"
+2,Peak-Time Receiver,"peak_inc_dur, onnet_inc_dur, inc_call_duration"
+3,Subscription Heavy,"subscription_amt, total_recharge_amount, Total_Revenue"
+4,Call Heavy User,"out_call_duration, out_call_duration_billed, onnet_call_duration"
