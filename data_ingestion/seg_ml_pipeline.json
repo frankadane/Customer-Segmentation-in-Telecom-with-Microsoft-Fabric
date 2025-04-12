@@ -1,0 +1,108 @@
+{
+    "name": "seg_ml_pipeline",
+    "objectId": "864244ab-80d8-4037-ab13-dc6141ca38fe",
+    "properties": {
+        "activities": [
+            {
+                "name": "monthly aggregated call data",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "source": {
+                        "type": "OdbcSource",
+                        "query": "SELECT \nto_hex(xxhash64(to_utf8(coalesce(msisdn , '')))) msisdn\n,service_class,activation_date,tenure,cell_id,total_spent,total_freebiz,voice_spent,data_spent,sms_spent,\nother_spent,int_out_duration,int_out_count,out_billed_sms_count,out_unbilled_sms_count,total_sms_count,\nonnet_sms_count,offnet_sms_count,int_sms_count,gpprs_traffic_up_down,fnf_in_use,call_me_back,out_mms_count,\nout_mms_usage,peak_out_count,out_call_duration_billed,gpprs_traffic_up_down_billed,off_peak_out_count,\nonnet_count,offnet_count,out_call_duration,onnet_call_duration,offnet_call_duration,bonus_duration,\nmidnight_out_duration,midnight_out_count,int_inc_count,int_inc_dur,onnet_inc_count,onnet_inc_dur,\noffnet_inc_count,offnet_inc_dur,inc_sms_count,peak_inc_count,peak_inc_dur,off_peak_inc_count,off_peak_inc_dur,\ninc_call_duration,midnight_inc_duration,midnight_inc_count,total_recharge_count,total_recharge_amount,\nrecharge_card_count,recharge_card_amount,recharge_evd_count,recharge_evd_amount,recharge_momo_count,\nrecharge_momo_amount,subscription_amt,flex_var_field1 Date_of_birth,\nflex_var_field2 Value_band,flex_var_field3 Total_Revenue,\nmomo_fees,momo_bundle,vas_spent,data_bundled_purchase\nFROM (\n    SELECT *,\n           ROW_NUMBER() OVER (PARTITION BY flex_var_field2 ORDER BY RANDOM()) AS rn\n    FROM team.segmented where day_id = 20250228 \n    and subscription_amt >0 and momo_fees >0 and payment_method = 'P'  and\n recharge_momo_count > 0 and offnet_call_duration >0 and flex_var_field1 <> 'null'\n) sub\n",
+                        "queryTimeout": "02:00:00",
+                        "datasetSettings": {
+                            "annotations": [],
+                            "type": "OdbcTable",
+                            "schema": [],
+                            "externalReferences": {
+                                "connection": "91b28431-b9ba-424d-aeac-1e3aacf465aa"
+                            }
+                        }
+                    },
+                    "sink": {
+                        "type": "DelimitedTextSink",
+                        "storeSettings": {
+                            "type": "LakehouseWriteSettings"
+                        },
+                        "formatSettings": {
+                            "type": "DelimitedTextWriteSettings",
+                            "quoteAllText": true,
+                            "fileExtension": ".txt"
+                        },
+                        "datasetSettings": {
+                            "annotations": [],
+                            "linkedService": {
+                                "name": "SEG_LH",
+                                "properties": {
+                                    "annotations": [],
+                                    "type": "Lakehouse",
+                                    "typeProperties": {
+                                        "workspaceId": "dd4e4e02-925b-4769-9c27-f6784f8f60b3",
+                                        "artifactId": "20bd63df-f64c-40e2-8bc6-84e76ce374cc",
+                                        "rootFolder": "Files"
+                                    }
+                                }
+                            },
+                            "type": "DelimitedText",
+                            "typeProperties": {
+                                "location": {
+                                    "type": "LakehouseLocation",
+                                    "fileName": "call_records.csv",
+                                    "folderPath": "raw"
+                                },
+                                "columnDelimiter": ",",
+                                "escapeChar": "\\",
+                                "firstRowAsHeader": true,
+                                "quoteChar": "\""
+                            },
+                            "schema": []
+                        }
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                }
+            },
+            {
+                "name": "segmentation inference",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "monthly aggregated call data",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "57ca442c-b62f-41c3-93b9-aeefe9487961",
+                    "workspaceId": "dd4e4e02-925b-4769-9c27-f6784f8f60b3"
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "986b93fe-65f0-4be4-afc2-7a34b9c42b2f",
+        "lastPublishTime": "2025-04-07T15:38:11Z"
+    }
+}
